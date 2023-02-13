@@ -32,6 +32,7 @@ func (h *handler) GetLastTransitions(w http.ResponseWriter, r *http.Request, par
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 	_, err = w.Write([]byte(r.URL.Query().Get("count")))
 	if err != nil {
 		log.Fatalln(err)
