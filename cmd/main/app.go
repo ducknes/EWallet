@@ -1,6 +1,7 @@
 package main
 
 import (
+	"infotecs-EWallet/internal/user"
 	"log"
 	"net"
 	"net/http"
@@ -13,6 +14,8 @@ func main() {
 	log.Println("creating router...")
 	router := httprouter.New()
 
+	handler := user.NewHandler()
+	handler.Register(router)
 	start(router)
 }
 
