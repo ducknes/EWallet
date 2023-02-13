@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"infotecs-EWallet/internal/user"
-	sqlite "infotecs-EWallet/internal/user/db/SQLite"
+	"infotecs-EWallet/internal/user/db/sqlite"
 	"log"
 	"net"
 	"net/http"
