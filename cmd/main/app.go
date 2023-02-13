@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"infotecs-EWallet/internal/user"
+	sqlite "infotecs-EWallet/internal/user/db/SQLite"
 	"log"
 	"net"
 	"net/http"
@@ -13,6 +15,13 @@ import (
 func main() {
 	log.Println("creating router...")
 	router := httprouter.New()
+
+	database, DBerr := sqlite.DatabaseConnection()
+	if DBerr != nil {
+		panic(DBerr)
+	}
+
+	fmt.Println(database)
 
 	handler := user.NewHandler()
 	handler.Register(router)

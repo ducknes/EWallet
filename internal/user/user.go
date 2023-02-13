@@ -3,9 +3,9 @@ package user
 import "time"
 
 type user struct {
-	WalletAddress       string
-	Balance             uint64
-	LastTransactionTime time.Time
+	WalletAddress       string    `json:"wallet_address"`
+	Balance             uint64    `json:"balance"`
+	LastTransactionTime time.Time `json:"last_transaction_time"`
 }
 
 func (u *user) NewUser() *user {
