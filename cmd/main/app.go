@@ -21,6 +21,17 @@ func main() {
 		panic(DBerr)
 	}
 
+	u := user.User{
+		WalletAddress:       "jhsfsbfkjsbklsfnsklfsd;afma",
+		Balance:             100,
+		LastTransactionTime: "-",
+	}
+
+	AddErr := sqlite.AddNewUser(database, &u)
+	if AddErr != nil {
+		panic(AddErr)
+	}
+
 	fmt.Println(database)
 
 	handler := user.NewHandler()
