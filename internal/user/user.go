@@ -18,9 +18,9 @@ func (u *user) NewUser() *user {
 
 func (u *user) randomWalletAddressGenerator() string {
 	letters := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	newAdress := make([]byte, 25)
-	for i := range newAdress {
-		newAdress[i] = letters[rand.Intn(len(letters))]
+	newAddress := make([]byte, 25)
+	for i := range newAddress {
+		newAddress[i] = letters[rand.Intn(len(letters))]
 	}
-	return string(newAdress)
+	return string(newAddress)
 }
