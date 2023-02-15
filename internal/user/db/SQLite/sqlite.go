@@ -40,5 +40,3 @@ func AddNewUser(db *sql.DB, u *user.User) error {
 
 	return nil
 }
-
-// how to сount row in database table

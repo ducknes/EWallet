@@ -15,27 +15,6 @@ func main() {
 	log.Println("creating router...")
 	router := httprouter.New()
 
-	database, DBerr := sqlite.DatabaseConnection()
-	if DBerr != nil {
-		panic(DBerr)
-	}
-
-	var count int
-
-	if err := database.QueryRow("SELECT COUNT(*) FROM users").Scan(&count); err != nil {
-		panic(err)
-	}
-
-	if count == 0 {
-		var u user.User
-		for i := 0; i < 10; i++ {
-			AddErr := sqlite.AddNewUser(database, u.NewUser())
-			if AddErr != nil {
-				panic(AddErr)
-			}
-		}
-	}
-
 	handler := user.NewHandler()
 	handler.Register(router)
 	start(router)
@@ -53,6 +32,25 @@ func start(httprouter *httprouter.Router) {
 		Handler:      httprouter,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
+	}
+
+	database, DBerr := sqlite.DatabaseConnection()
+	if DBerr != nil {
+		panic(DBerr)
+	}
+
+	var count int
+	if err := database.QueryRow("SELECT COUNT(*) FROM users").Scan(&count); err != nil {
+		panic(err)
+	}
+	if count == 0 {
+		var u user.User
+		for i := 0; i < 10; i++ {
+			AddErr := sqlite.AddNewUser(database, u.NewUser())
+			if AddErr != nil {
+				panic(AddErr)
+			}
+		}
 	}
 
 	log.Println("listening server on localhost")
