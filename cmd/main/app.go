@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"infotecs-EWallet/internal/user"
 	"infotecs-EWallet/internal/user/db/sqlite"
 	"log"
@@ -21,18 +20,15 @@ func main() {
 		panic(DBerr)
 	}
 
-	u := user.User{
-		WalletAddress:       "jhsfsbfkjsbklsfnsklfsd;afma",
-		Balance:             100,
-		LastTransactionTime: "-",
-	}
+	var u user.User
 
-	AddErr := sqlite.AddNewUser(database, &u)
-	if AddErr != nil {
-		panic(AddErr)
-	}
+	for i := 0; i < 10; i++ {
+		AddErr := sqlite.AddNewUser(database, u.NewUser())
+		if AddErr != nil {
+			panic(AddErr)
+		}
 
-	fmt.Println(database)
+	}
 
 	handler := user.NewHandler()
 	handler.Register(router)
