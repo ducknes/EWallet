@@ -20,14 +20,20 @@ func main() {
 		panic(DBerr)
 	}
 
-	var u user.User
+	var count int
 
-	for i := 0; i < 10; i++ {
-		AddErr := sqlite.AddNewUser(database, u.NewUser())
-		if AddErr != nil {
-			panic(AddErr)
+	if err := database.QueryRow("SELECT COUNT(*) FROM users").Scan(&count); err != nil {
+		panic(err)
+	}
+
+	if count == 0 {
+		var u user.User
+		for i := 0; i < 10; i++ {
+			AddErr := sqlite.AddNewUser(database, u.NewUser())
+			if AddErr != nil {
+				panic(AddErr)
+			}
 		}
-
 	}
 
 	handler := user.NewHandler()
