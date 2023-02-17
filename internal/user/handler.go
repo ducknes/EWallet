@@ -43,9 +43,10 @@ func (h *handler) GetLastTransitions(w http.ResponseWriter, r *http.Request, par
 
 func (h *handler) GetBalance(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	address := params.ByName("address")
-	w.Write([]byte("get balance\n"))
-	w.Write([]byte(address))
-	s.WatchUserBalance(address)
+	jsonB := s.WatchUserBalance(address)
+	if _, err := w.Write(jsonB); err != nil {
+		log.Fatalln(err)
+	}
 }
 
 func (h *handler) SendMoney(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
