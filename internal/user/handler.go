@@ -10,9 +10,11 @@ import (
 
 const (
 	lastTransitionsUrl = "/api/transactions"
-	balanceUrl         = "/api/wallet/{address}/balance"
+	balanceUrl         = "/api/wallet/:address/balance"
 	sendMoneyUrl       = "/api/send"
 )
+
+var s *service
 
 type handler struct {
 }
@@ -40,7 +42,10 @@ func (h *handler) GetLastTransitions(w http.ResponseWriter, r *http.Request, par
 }
 
 func (h *handler) GetBalance(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	w.Write([]byte("get balance"))
+	address := params.ByName("address")
+	w.Write([]byte("get balance\n"))
+	w.Write([]byte(address))
+	s.WatchUserBalance(address)
 }
 
 func (h *handler) SendMoney(w http.ResponseWriter, r *http.Request, params httprouter.Params) {

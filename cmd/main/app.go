@@ -2,7 +2,6 @@ package main
 
 import (
 	"infotecs-EWallet/internal/user"
-	"infotecs-EWallet/internal/user/db/sqlite"
 	"log"
 	"net"
 	"net/http"
@@ -15,8 +14,6 @@ func main() {
 	log.Println("creating router...")
 	router := httprouter.New()
 
-	handler := user.NewHandler()
-	handler.Register(router)
 	start(router)
 }
 
@@ -34,7 +31,7 @@ func start(httprouter *httprouter.Router) {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	database, DBerr := sqlite.DatabaseConnection()
+	database, DBerr := user.DatabaseConnection()
 	if DBerr != nil {
 		panic(DBerr)
 	}
@@ -46,12 +43,15 @@ func start(httprouter *httprouter.Router) {
 	if count == 0 {
 		var u user.User
 		for i := 0; i < 10; i++ {
-			AddErr := sqlite.AddNewUser(database, u.NewUser())
+			AddErr := user.AddNewUser(database, u.NewUser())
 			if AddErr != nil {
 				panic(AddErr)
 			}
 		}
 	}
+
+	handler := user.NewHandler()
+	handler.Register(httprouter)
 
 	log.Println("listening server on localhost")
 	log.Fatalln(server.Serve(listener))
