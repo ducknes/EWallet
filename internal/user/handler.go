@@ -4,6 +4,7 @@ import (
 	"infotecs-EWallet/internal/handlers"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -30,13 +31,12 @@ func (h *handler) Register(httprouter *httprouter.Router) {
 }
 
 func (h *handler) GetLastTransitions(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	_, err := w.Write([]byte("get last transitions\n"))
-	if err != nil {
-		log.Fatalln(err)
+	count, AtoiErr := strconv.Atoi(r.URL.Query().Get("count"))
+	if AtoiErr != nil {
+		log.Fatalln(AtoiErr)
 	}
-
-	_, err = w.Write([]byte(r.URL.Query().Get("count")))
-	if err != nil {
+	jsonB := s.GetUsersTransactions(count)
+	if _, err := w.Write(jsonB); err != nil {
 		log.Fatalln(err)
 	}
 }

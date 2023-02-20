@@ -2,6 +2,7 @@ package user
 
 import (
 	"math/rand"
+	"time"
 )
 
 type User struct {
@@ -15,7 +16,7 @@ func (u *User) NewUser() *User {
 	return &User{
 		WalletAddress:       u.randomWalletAddressGenerator(),
 		Balance:             100,
-		LastTransactionTime: 0,
+		LastTransactionTime: int64(rand.Intn(int(time.Now().Unix()))),
 	}
 }
 
