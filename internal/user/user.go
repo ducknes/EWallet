@@ -12,6 +12,12 @@ type User struct {
 	LastTransactionTime int64  `json:"last_transaction_time"`
 }
 
+type Send struct {
+	From   string `json:"from"`
+	To     string `json:"to"`
+	Amount uint64 `json:"amount"`
+}
+
 func (u *User) NewUser() *User {
 	return &User{
 		WalletAddress:       u.randomWalletAddressGenerator(),

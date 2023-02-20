@@ -1,6 +1,7 @@
 package user
 
 import (
+	"encoding/json"
 	"infotecs-EWallet/internal/handlers"
 	"log"
 	"net/http"
@@ -15,13 +16,14 @@ const (
 	sendMoneyUrl       = "/api/send"
 )
 
-var s *service
-
 type handler struct {
+	service *service
 }
 
-func NewHandler() handlers.Handler {
-	return &handler{}
+func NewHandler(service *service) handlers.Handler {
+	return &handler{
+		service: service,
+	}
 }
 
 func (h *handler) Register(httprouter *httprouter.Router) {
@@ -35,7 +37,7 @@ func (h *handler) GetLastTransitions(w http.ResponseWriter, r *http.Request, par
 	if AtoiErr != nil {
 		log.Fatalln(AtoiErr)
 	}
-	jsonB := s.GetUsersTransactions(count)
+	jsonB := h.service.GetUsersTransactions(count)
 	if _, err := w.Write(jsonB); err != nil {
 		log.Fatalln(err)
 	}
@@ -43,12 +45,17 @@ func (h *handler) GetLastTransitions(w http.ResponseWriter, r *http.Request, par
 
 func (h *handler) GetBalance(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	address := params.ByName("address")
-	jsonB := s.WatchUserBalance(address)
+	jsonB := h.service.WatchUserBalance(address)
 	if _, err := w.Write(jsonB); err != nil {
 		log.Fatalln(err)
 	}
 }
 
 func (h *handler) SendMoney(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	w.Write([]byte("send money"))
+	var send Send
+	errJson := json.NewDecoder(r.Body).Decode(&send)
+	if errJson != nil {
+		log.Fatalln(errJson)
+	}
+	h.service.PostSendMoney(send)
 }

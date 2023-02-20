@@ -13,28 +13,3 @@ func DatabaseConnection() (*sql.DB, error) {
 
 	return db, nil
 }
-
-func AddNewUser(db *sql.DB, u *User) error {
-	tx, err := db.Begin()
-	if err != nil {
-		return err
-	}
-
-	stmt, err := tx.Prepare("INSERT INTO users (wallet_address, balance, last_transaction_time) VALUES (?, ?, ?)")
-
-	if err != nil {
-		return err
-	}
-
-	defer stmt.Close()
-
-	_, err = stmt.Exec(u.WalletAddress, u.Balance, u.LastTransactionTime)
-
-	if err != nil {
-		return err
-	}
-
-	tx.Commit()
-
-	return nil
-}

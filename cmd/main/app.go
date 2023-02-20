@@ -35,6 +35,10 @@ func start(httprouter *httprouter.Router) {
 	if DBerr != nil {
 		panic(DBerr)
 	}
+	repos := user.NewRepo(database)
+	service := user.NewService(repos)
+	handler := user.NewHandler(service)
+	handler.Register(httprouter)
 
 	var count int
 	if err := database.QueryRow("SELECT COUNT(*) FROM users").Scan(&count); err != nil {
@@ -43,15 +47,12 @@ func start(httprouter *httprouter.Router) {
 	if count == 0 {
 		var u user.User
 		for i := 0; i < 10; i++ {
-			AddErr := user.AddNewUser(database, u.NewUser())
+			AddErr := repos.AddNewUser(u.NewUser())
 			if AddErr != nil {
 				panic(AddErr)
 			}
 		}
 	}
-
-	handler := user.NewHandler()
-	handler.Register(httprouter)
 
 	log.Println("listening server on localhost")
 	log.Fatalln(server.Serve(listener))
