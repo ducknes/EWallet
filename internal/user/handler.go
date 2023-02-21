@@ -33,6 +33,7 @@ func (h *handler) Register(httprouter *httprouter.Router) {
 }
 
 func (h *handler) GetLastTransitions(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	log.Println("запрос последних транзакций")
 	count, AtoiErr := strconv.Atoi(r.URL.Query().Get("count"))
 	if AtoiErr != nil {
 		log.Fatalln(AtoiErr)
@@ -44,6 +45,7 @@ func (h *handler) GetLastTransitions(w http.ResponseWriter, r *http.Request, par
 }
 
 func (h *handler) GetBalance(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	log.Println("запрос на просмотр баланса")
 	address := params.ByName("address")
 	jsonB := h.service.WatchUserBalance(address)
 	if _, err := w.Write(jsonB); err != nil {
@@ -52,6 +54,7 @@ func (h *handler) GetBalance(w http.ResponseWriter, r *http.Request, params http
 }
 
 func (h *handler) SendMoney(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	log.Println("запрос на отправку денег")
 	var send Send
 	errJson := json.NewDecoder(r.Body).Decode(&send)
 	if errJson != nil {

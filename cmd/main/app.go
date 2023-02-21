@@ -11,14 +11,14 @@ import (
 )
 
 func main() {
-	log.Println("creating router...")
+	log.Println("создание роутера...")
 	router := httprouter.New()
 
 	start(router)
 }
 
 func start(httprouter *httprouter.Router) {
-	log.Println("starting application...")
+	log.Println("запуск приложения...")
 
 	listener, err := net.Listen("tcp", "localhost:1234")
 	if err != nil {
@@ -55,6 +55,6 @@ func start(httprouter *httprouter.Router) {
 		}
 	}
 
-	log.Println("listening server on localhost")
+	log.Println("сервер запущен на локальном хосте")
 	log.Fatalln(server.Serve(listener))
 }

@@ -45,7 +45,7 @@ func (r *Repository) GetUserByWalletAddress(wa string) *User {
 	var user User
 
 	if err := r.DB.QueryRow(query, wa).Scan(&user.ID, &user.WalletAddress, &user.Balance, &user.LastTransactionTime); err != nil {
-		log.Printf("user not found. err: %s\n", err)
+		log.Printf("пользователь не найден. ошибка: %s\n", err)
 	}
 
 	return &user
