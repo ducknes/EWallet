@@ -35,6 +35,7 @@ func start(httprouter *httprouter.Router) {
 	if DBerr != nil {
 		panic(DBerr)
 	}
+
 	repos := user.NewRepo(database)
 	service := user.NewService(repos)
 	handler := user.NewHandler(service)
@@ -42,14 +43,14 @@ func start(httprouter *httprouter.Router) {
 
 	var count int
 	if err := database.QueryRow("SELECT COUNT(*) FROM users").Scan(&count); err != nil {
-		panic(err)
+		log.Println(err)
 	}
 	if count == 0 {
 		var u user.User
 		for i := 0; i < 10; i++ {
 			AddErr := repos.AddNewUser(u.NewUser())
 			if AddErr != nil {
-				panic(AddErr)
+				log.Println(AddErr)
 			}
 		}
 	}
